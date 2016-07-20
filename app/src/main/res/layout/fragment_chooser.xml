@@ -1,4 +1,5 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,5 +10,67 @@
     tools:context="me.gchriswill.pinner.ChooserFragment"
     tools:showIn="@layout/activity_chooser">
 
+    <ImageView
+        android:id="@+id/chooser_account_image"
+        android:src="@drawable/ic_account_circle"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"/>
+
+    <LinearLayout
+        android:layout_below="@id/chooser_account_image"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:id="@+id/chooser_button_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.twitter.sdk.android.core.identity.TwitterLoginButton
+            android:id="@+id/twitter_login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp" />
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/google_sign_in_button"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/login_button"
+            android:layout_width="210dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="30dp"
+            android:elevation="2dp"/>
+
+        <Button
+            android:id="@+id/main_login_button"
+            android:text="Login with email"
+            android:textColor="#fff"
+            android:backgroundTint="@color/colorPrimary"
+            android:layout_width="200dp"
+            android:layout_height="50dp"/>
+
+        <TextView
+            android:id="@+id/main_text_separator"
+            android:text="or"
+            android:textSize="18sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/main_create_button"
+            android:text="Create Account"
+            android:textColor="#fff"
+            android:backgroundTint="@color/colorPrimary"
+            android:layout_width="200dp"
+            android:layout_height="50dp"/>
+
+    </LinearLayout>
 
 </RelativeLayout>
