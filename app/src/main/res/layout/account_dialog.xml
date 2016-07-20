@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Chooser"
+    android:tag="root_dialog_view">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:id="@+id/acount_dialog_icon"
+            android:src="@drawable/ic_account_circle"
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:enabled="false"
+                android:id="@+id/main_dialog_title"
+                android:text="Create Account:"
+                android:textAlignment="center"
+                android:textSize="24dp"
+                android:textColor="@color/colorAccent"
+                android:inputType="textEmailAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                tools:ignore="HardcodedText" />
+
+        </android.support.design.widget.TextInputLayout>
+
+    </RelativeLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/main_dialog_username_field"
+            android:hint="Username"
+            android:inputType="textPersonName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            tools:ignore="HardcodedText" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/main_dialog_email_field"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            tools:ignore="HardcodedText" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/main_dialog_password_field"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            tools:ignore="HardcodedText" />
+
+    </android.support.design.widget.TextInputLayout>
+
+</LinearLayout>
