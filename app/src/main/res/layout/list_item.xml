@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="96dp"
+    android:elevation="2.0dp">
+
+    <ImageView
+        android:id="@+id/list_item_icon"
+        android:src="@drawable/ic_account_circle"
+        android:tint="@color/colorPrimary"
+        android:layout_width="96dp"
+        android:layout_height="96dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_toEndOf="@+id/list_item_icon"
+        android:layout_alignParentEnd="true"
+        android:textAlignment="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Username"
+        android:textColor="@color/colorPrimaryDark"
+        android:id="@+id/list_item_username"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/inner_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toEndOf="@+id/list_item_icon"
+        android:gravity="center"
+        android:layout_below="@+id/list_item_username">
+
+        <ImageView
+            android:id="@+id/list_item_inner_icon_email"
+            android:src="@drawable/ic_email"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+
+        <ImageView
+            android:id="@+id/list_item_inner_icon_phone"
+            android:src="@drawable/ic_call"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+
+        <ImageView
+            android:id="@+id/list_item_inner_icon_text"
+            android:src="@drawable/ic_chat_bubble"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+
+        <ImageView
+            android:id="@+id/list_item_inner_icon_location"
+            android:src="@drawable/ic_user_location"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+
+    </LinearLayout>
+
+    <View
+        android:background="#333"
+        android:alpha="0.25"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"/>
+
+
+</RelativeLayout>

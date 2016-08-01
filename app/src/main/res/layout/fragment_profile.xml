@@ -1,0 +1,263 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingBottom="8dp"
+    tools:context=".profile.ProfileActivityFragment"
+    tools:showIn="@layout/activity_profile">
+
+    <ImageView
+        android:scaleType="fitCenter"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/profile_viewer_user_image"
+        android:src="@drawable/ic_account_circle"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        tools:ignore="ContentDescription" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/profile_viewer_username_field_layout"
+        android:layout_below="@+id/profile_viewer_user_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.TextInputEditText
+            android:enabled="false"
+            android:id="@+id/profile_viewer_username_field"
+            android:text="Username"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textColor="@color/colorPrimaryDark"
+            android:inputType="textPersonName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/profile_viewer_username_field_layout"
+        android:id="@+id/profile_viewer_email_field_action_button"
+        android:src="@drawable/ic_email"
+        android:tint="@android:color/white"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="16dp"
+        tools:ignore="ContentDescription" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/profile_viewer_email_field_layout"
+        android:layout_toEndOf="@id/profile_viewer_email_field_action_button"
+        android:layout_below="@+id/profile_viewer_username_field_layout"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:enabled="false"
+            android:focusable="false"
+            android:id="@+id/profile_viewer_email_field"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            tools:ignore="HardcodedText" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/profile_viewer_email_field_layout"
+        android:id="@+id/profile_viewer_phone_field_action_button"
+        android:src="@drawable/ic_call"
+        android:tint="@android:color/white"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="16dp"
+        tools:ignore="ContentDescription" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/profile_viewer_phone_field_layout"
+        android:layout_toEndOf="@id/profile_viewer_phone_field_action_button"
+        android:layout_below="@+id/profile_viewer_email_field_layout"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:enabled="false"
+            android:focusable="false"
+            android:id="@+id/profile_viewer_phone_field"
+            android:hint="Phone"
+            android:inputType="phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            tools:ignore="HardcodedText" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:enabled="false"
+        android:focusable="false"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/profile_viewer_email_field_layout"
+        android:layout_toEndOf="@id/profile_viewer_phone_field_layout"
+        android:id="@+id/profile_viewer_checkbox_layout_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/profile_viewer_phone_field_layout"
+        android:id="@+id/profile_viewer_text_phone_field_action_button"
+        android:src="@drawable/ic_chat_bubble"
+        android:tint="@android:color/white"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="16dp"
+        tools:ignore="ContentDescription" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/profile_viewer_text_phone_field_layout"
+        android:layout_toEndOf="@id/profile_viewer_text_phone_field_action_button"
+        android:layout_below="@+id/profile_viewer_phone_field_layout"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:enabled="false"
+            android:focusable="false"
+            android:id="@+id/profile_viewer_text_phone_field"
+            android:hint="Text number"
+            android:inputType="phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            tools:ignore="HardcodedText" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:enabled="false"
+        android:focusable="false"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/profile_viewer_phone_field_layout"
+        android:layout_toEndOf="@id/profile_viewer_text_phone_field_layout"
+        android:id="@+id/profile_viewer_checkbox_layout_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/profile_viewer_text_phone_field_layout"
+        android:id="@+id/profile_viewer_address_field_action_button"
+        android:src="@drawable/ic_pin_drop"
+        android:tint="@android:color/white"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="16dp"
+        tools:ignore="ContentDescription" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/profile_viewer_address_field_layout"
+        android:layout_toEndOf="@id/profile_viewer_text_phone_field_action_button"
+        android:layout_below="@+id/profile_viewer_text_phone_field_layout"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:enabled="false"
+            android:focusable="false"
+            android:id="@+id/profile_viewer_address_field"
+            android:hint="Address"
+            android:inputType="textPostalAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            tools:ignore="HardcodedText" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:enabled="false"
+        android:focusable="false"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/profile_viewer_text_phone_field_layout"
+        android:layout_toEndOf="@id/profile_viewer_address_field_layout"
+        android:id="@+id/profile_viewer_checkbox_layout_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/profile_viewer_address_field_layout"
+        android:id="@+id/profile_viewer_current_location_field_action_button"
+        android:src="@drawable/ic_user_location"
+        android:tint="@android:color/white"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        tools:ignore="ContentDescription" />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_below="@id/profile_viewer_address_field_layout"
+        android:layout_toEndOf="@id/profile_viewer_current_location_field_action_button"
+        android:id="@+id/profile_viewer_current_location_layout"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:enabled="false"
+            android:focusable="false"
+            android:id="@+id/profile_viewer_current_location_field"
+            android:hint="Current Location"
+            android:inputType="textPostalAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            tools:ignore="HardcodedText"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:enabled="false"
+        android:focusable="false"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/profile_viewer_address_field_layout"
+        android:layout_toEndOf="@id/profile_viewer_current_location_layout"
+        android:id="@+id/profile_viewer_checkbox_layout_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"/>
+
+</RelativeLayout>
