@@ -56,7 +56,6 @@ public class Chooser extends AppCompatActivity implements GoogleApiClient.OnConn
     //
     private static final String TAG = "Chooser";
 
-    // TODO: Consumer key and secret should be obfuscated in your source code before shipping.
     private static final String TWITTER_KEY = "Xw42ob9CmP0HcsKVUPCdEfmVY";
     private static final String TWITTER_SECRET = "cHhOoKlG7QFmU89UGm0jciGM1zNBUqaNGAk3xRpBthpX6Rq9n0";
     private static final int RC_SIGN_IN = 10001;
