@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="Shortcuts">
+
+        <ListPreference
+            android:key="me.gchriswill.pinner.PREF_SHORTCUTS_TYPES"
+            android:title="Shortcut Types"
+            android:entries="@array/shortcut_types"
+            android:entryValues="@array/shortcut_types"
+            android:defaultValue="false"
+            android:summary="Please select a shortcut type for your widget..."
+            android:dialogTitle="Available Shortcut Types" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Profiles">
+
+        <ListPreference
+            android:defaultValue="false"
+            android:key="me.gchriswill.pinner.PREF_AVAILABLE_PROFILES"
+            android:title="My Profile List"
+            android:summary="Please select one of your saved profiles..."
+            android:dialogTitle="Available Profiles" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

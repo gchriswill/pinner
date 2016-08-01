@@ -272,7 +272,7 @@ public class SetupDialog extends DialogFragment {
             Log.e(TAG, "performPositiveAction: Email --> Pattern Doesn't matches");
 
             accountDialogListener.showAlertWithLocalErrorFormat("Invalid Email Format",
-                    "Please, enter a valid email address..." );
+                    "Please, enter a valid email..." );
 
         } /* 3- Password Alert Validation Error*/ else if (!regexPwdMatcher) {
 

@@ -4,4 +4,5 @@
     <string name="title_activity_chooser">Choose Login or Create</string>
     <string name="facebook_app_id">271626369872574</string>
     <string name="fb_login_protocol_scheme">fb271626369872574</string>
+    <string name="title_activity_maps">User Location</string>
 </resources>

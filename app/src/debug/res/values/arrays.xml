@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <array name="shortcut_types">
+        <item>Mail</item>
+        <item>Phone</item>
+        <item>Text</item>
+        <item>Address</item>
+        <item>Location</item>
+    </array>
+
+</resources>

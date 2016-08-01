@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="64dp"
+    android:layout_height="64dp">
+
+    <ImageButton
+        android:id="@+id/circular_image_button"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:backgroundTint="@color/colorAccent"
+        android:background="@drawable/ic_account_circle"
+        tools:ignore="ContentDescription" />
+
+    <FrameLayout
+        android:layout_marginStart="-25dp"
+        android:layout_toEndOf="@+id/circular_image_button"
+        android:layout_alignBottom="@+id/circular_image_button"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/circle">
+
+        <ImageButton
+            android:layout_gravity="center"
+            android:id="@+id/circular_image_icon_button"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:background="@drawable/ic_pin_drop"
+            tools:ignore="ContentDescription" />
+
+    </FrameLayout>
+
+</RelativeLayout>

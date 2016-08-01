@@ -20,9 +20,9 @@ import com.twitter.sdk.android.Twitter;
 
 import io.fabric.sdk.android.Fabric;
 
-public class Home extends AppCompatActivity {
+public class HomeCache extends AppCompatActivity {
 
-    private static final String TAG = "Home";
+    private static final String TAG = "HomeCache";
 
     FloatingActionButton addUser;
     FirebaseAuth mAuth;
@@ -37,7 +37,7 @@ public class Home extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        addUser = (FloatingActionButton) findViewById(R.id.fab);
+        //addUser = (FloatingActionButton) findViewById(R.id.fab);
 
         // Initializing Firebase authentication listener ===========================================
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -52,14 +52,14 @@ public class Home extends AppCompatActivity {
                     Log.e(TAG, "onAuthStateChanged:signed_in:" + user.getDisplayName() );
                     Log.e(TAG, "onAuthStateChanged:signed_in:" + user.getEmail() );
 
-                    Snackbar.make(Home.this.getWindow().getDecorView(),
+                    Snackbar.make(HomeCache.this.getWindow().getDecorView(),
                             "You had been logged in", Snackbar.LENGTH_LONG).show();
 
                 } else {
 
                     Log.e(TAG, "onAuthStateChanged:signed_out");
 
-                    startActivity(new Intent(Home.this, Chooser.class) );
+                    startActivity(new Intent(HomeCache.this, Chooser.class) );
 
                 }
 
@@ -78,7 +78,7 @@ public class Home extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Snackbar.make(Home.this.getWindow().getDecorView(), "Add user button triggered",
+                Snackbar.make(HomeCache.this.getWindow().getDecorView(), "Add user button triggered",
                         Snackbar.LENGTH_LONG).show();
 
             }
@@ -118,7 +118,7 @@ public class Home extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
+        // automatically handle clicks on the HomeCache/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 

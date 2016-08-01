@@ -9,28 +9,30 @@ import java.util.Map;
  */
 public class User implements Serializable {
 
-    public String username;
+    public String displayName;
     public String email;
     public String password;
     public String userId;
     public String imageUrl;
+    public String provider;
 
     public String phone;
-    public String address;
-    public boolean location;
+    public String text;
 
-    public boolean isSahringPhone;
-    public boolean isSahringAddress;
-    public boolean isSharingLocation;
+    public boolean isSharingPhone = false;
+    public boolean isSharingText = false;
+    public boolean isSharingAddress = false;
+    public boolean isSharingLocation = false;
 
-    public Map<String, Object> profiles = new HashMap<>();
+    public Map<String, Object> location = new HashMap<>();
+    public Map<String, Object> friends = new HashMap<>();
 
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
     public User(String username, String email, String password) {
-        this.username = username;
+        this.displayName = username;
         this.email = email;
         this.password = password;
     }

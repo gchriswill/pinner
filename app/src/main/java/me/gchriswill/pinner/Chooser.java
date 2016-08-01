@@ -36,7 +36,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.TwitterAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -85,6 +88,7 @@ public class Chooser extends AppCompatActivity implements GoogleApiClient.OnConn
 
     // Modes
     private long dialogMode;
+    private AlertDialog alertation;
 
 
     @Override
@@ -99,6 +103,7 @@ public class Chooser extends AppCompatActivity implements GoogleApiClient.OnConn
 
         // Initializing Twitter's Fabric SKD (Needs to be initialize right after the super call)
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+
         Fabric.with(this, new Twitter(authConfig));
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -126,7 +131,6 @@ public class Chooser extends AppCompatActivity implements GoogleApiClient.OnConn
 
         // =========================================================================================
 
-
         // Twitter Logging setup ===================================================================
 
         // Initializing Twitter login button reference property
@@ -136,16 +140,11 @@ public class Chooser extends AppCompatActivity implements GoogleApiClient.OnConn
         twitterLoginButton.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> result) {
-
                 // TwitterSession is also available through:
                 // Twitter.getInstance().core.getSessionManager().getActiveSession()
-                TwitterSession session = result.data;
-
-                handleTwitterSession(session);
-
+                handleTwitterSession(result.data);
 //                String msg = "@" + session.getUserName() + " logged in! (#" + session.getUserId() + ")";
 //                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-
             }
             @Override
             public void failure(TwitterException exception) {
@@ -177,7 +176,6 @@ public class Chooser extends AppCompatActivity implements GoogleApiClient.OnConn
 
 
         // Facebook login setup ====================================================================
-
         // Initializing Facebook call back manager
         mCallbackManager = CallbackManager.Factory.create();
 
@@ -191,27 +189,19 @@ public class Chooser extends AppCompatActivity implements GoogleApiClient.OnConn
         faceBookLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-
                 Log.e(TAG, "facebook:onSuccess:" + loginResult);
-
                 handleFacebookAccessToken(loginResult.getAccessToken());
-
             }
 
             @Override
             public void onCancel() {
-
                 Log.e(TAG, "facebook:onCancel");
-
             }
 
             @Override
             public void onError(FacebookException error) {
-
-                Log.e(TAG, "facebook:onError", error);
-
+                Log.e(TAG, "facebook:onError", error );
             }
-
         });
         // =========================================================================================
 
@@ -219,30 +209,30 @@ public class Chooser extends AppCompatActivity implements GoogleApiClient.OnConn
         loginButton = (Button) findViewById(R.id.main_login_button);
         createButton = (Button) findViewById(R.id.main_create_button);
         progressDialog = new ProgressDialog(this);
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
         loginButton.setOnClickListener(this);
         createButton.setOnClickListener(this);
-
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        if (alertation != null){
+            alertation.dismiss();
+        }
+
+        progressDialog.dismiss();
 
         loginButton.setOnClickListener(null);
         createButton.setOnClickListener(null);
-
     }
 
     // Twitter call back handler for getting the Twitter session from the call back manager ========
     private void handleTwitterSession(TwitterSession session) {
-
         progressDialog.setButton(ProgressDialog.BUTTON_POSITIVE, "Continue",
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -265,7 +255,6 @@ public class Chooser extends AppCompatActivity implements GoogleApiClient.OnConn
         });
 
         progressDialog.show();
-
         progressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.INVISIBLE);
 
         AuthCredential credential = TwitterAuthProvider.getCredential(
@@ -288,37 +277,55 @@ public class Chooser extends AppCompatActivity implements GoogleApiClient.OnConn
                             alertUserWithTitleAndMessage("Authentication Failed!",
                                     "Twitter authentication has failed with your Twitter account!" +
                                             "Please retry or use a different method of authentication");
-
                         }else{
+                            mFuser = task.getResult().getUser();
+                            String displayName = mFuser.getDisplayName();
 
+                            user = new User();
+                            user.userId = mFuser.getUid();
+                            user.displayName = displayName;
+                            user.email = mFuser.getEmail();
+                            user.provider = mFuser.getProviderId();
 
-                            progressDialog.setMessage("You had successfully logged in using your " +
+                            mFDB.getReference().child("users").child(mFuser.getUid())
+                                    .addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.getValue() == null){
+                                                // New User
+                                                mFDB.getReference().child("users")
+                                                        .child(mFuser.getUid()).setValue(user);
+                                                mFDB.getReference().child("users")
+                                                        .child(mFuser.getUid())
+                                                        .removeEventListener(this);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+                                            Log.e(TAG, "onCancelled: " + databaseError.getMessage());
+                                        }
+                                    });
+                            progressDialog.setMessage(displayName + " had successfully logged in using your " +
                                     "Twitter account!");
 
                             progressDialog.getButton(ProgressDialog.BUTTON_POSITIVE)
                                     .setVisibility(View.VISIBLE);
-
-
                         }
-
                     }
 
                 });
-
     }
     // =============================================================================================
 
 
     // Google call back handler for getting the Google account from the call back manager ==========
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-
         progressDialog.setButton(ProgressDialog.BUTTON_POSITIVE, "Continue",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                         progressDialog.dismiss();
-
                     }
 
                 });
@@ -326,15 +333,12 @@ public class Chooser extends AppCompatActivity implements GoogleApiClient.OnConn
         progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-
                 finish();
-
             }
 
         });
 
         progressDialog.show();
-
         progressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.INVISIBLE);
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -344,45 +348,64 @@ public class Chooser extends AppCompatActivity implements GoogleApiClient.OnConn
 
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-
                         if (!task.isSuccessful()) {
-
                             Log.w(TAG, "signInWithCredential", task.getException());
                             progressDialog.dismiss();
 
                             alertUserWithTitleAndMessage("Authentication Failed!",
                                     "Google authentication has failed with your Google account!" +
                                     "Please retry or use a different method of authentication");
-
                         }else{
+                            mFuser = task.getResult().getUser();
+                            String displayName = mFuser.getDisplayName();
 
-                            progressDialog.setMessage("You had successfully logged in using your " +
-                                    "Google account!");
+                            user = new User();
+                            user.userId = mFuser.getUid();
+                            user.displayName = displayName;
+                            user.email = mFuser.getEmail();
+                            user.provider = mFuser.getProviderId();
+
+                            // Checking if the user not exists in databased then ad user object to
+                            // database...
+                            mFDB.getReference().child("users").child(mFuser.getUid())
+                                    .addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.getValue() == null){
+                                                // New User
+                                                mFDB.getReference().child("users")
+                                                        .child(mFuser.getUid()).setValue(user);
+                                                mFDB.getReference().child("users")
+                                                        .child(mFuser.getUid())
+                                                        .removeEventListener(this);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+                                            Log.e(TAG, "onCancelled: " + databaseError.getMessage());
+                                        }
+                            });
+
+                            progressDialog.setMessage(displayName +
+                                    " has successfully logged in using a " + "Google account!");
 
                             progressDialog.getButton(ProgressDialog.BUTTON_POSITIVE)
                                     .setVisibility(View.VISIBLE);
-
-
                         }
-
                     }
-
                 });
-
     }
     // =============================================================================================
 
 
     // Facebook call back handler for getting the access token from the call back manager ==========
     private void handleFacebookAccessToken(AccessToken token) {
-
         progressDialog.setButton(ProgressDialog.BUTTON_POSITIVE, "Continue",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                         progressDialog.dismiss();
-
                     }
 
                 });
@@ -390,15 +413,11 @@ public class Chooser extends AppCompatActivity implements GoogleApiClient.OnConn
         progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-
                 finish();
-
             }
-
         });
 
         progressDialog.show();
-
         progressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.INVISIBLE);
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
@@ -408,39 +427,57 @@ public class Chooser extends AppCompatActivity implements GoogleApiClient.OnConn
 
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-
                         if (!task.isSuccessful()) {
-
                             Log.e(TAG, "signInWithCredential", task.getException());
                             progressDialog.dismiss();
 
-                            alertUserWithTitleAndMessage("Authentication Failed!",
+                            alertation = alertUserWithTitleAndMessage("Authentication Failed!",
                                     "Facebook authentication has failed with your Facebook account!" +
                                             "Please retry or use a different method of authentication");
-
                         }else{
+                            mFuser = task.getResult().getUser();
+                            String displayName = mFuser.getDisplayName();
 
-                            progressDialog.setMessage("You had successfully logged in using your " +
+                            user.provider = mFuser.getProviderId();
+
+                            mFDB.getReference().child("users").child(mFuser.getUid())
+                                    .addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.getValue() == null){
+                                                // New User
+                                                mFDB.getReference().child("users")
+                                                        .child(mFuser.getUid()).setValue(user);
+                                                mFDB.getReference().child("users")
+                                                        .child(mFuser.getUid())
+                                                        .removeEventListener(this);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+                                            Log.e(TAG, "onCancelled: " + databaseError.getMessage());
+                                        }
+                                    });
+
+                            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+
+                            progressDialog.setMessage(displayName + " had successfully logged in using your " +
                                     "Facebook account!");
 
                             progressDialog.getButton(ProgressDialog.BUTTON_POSITIVE)
                                     .setVisibility(View.VISIBLE);
-
                         }
-
                     }
 
                 });
-
     }
     // =============================================================================================
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         //Log.e(TAG, "onActivityResult: " + requestCode + resultCode + data.toString() );
-
         // Redirecting the results to Facebook's callback manager.
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
 
@@ -450,80 +487,58 @@ public class Chooser extends AppCompatActivity implements GoogleApiClient.OnConn
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
-
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
 
             if (result.isSuccess()) {
-
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
-
             }
-
         }
-
     }
 
     @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {}
 
     // From Past
     // Login and Create accounts Buttons Click listener ============================================
     @Override
     public void onClick(View v) {
-
         int buttonId = v.getId();
 
         if (buttonId == R.id.main_login_button){
-
             Log.e(TAG, "onClick: Login Button has being activated...");
             showAccountDialog(SetupDialog.DIALOG_MODE_LOGIN);
-
         }
 
         if (buttonId == R.id.main_create_button){
-
             Log.e(TAG, "onClick: Create Button has being activated...");
             showAccountDialog(SetupDialog.DIALOG_MODE_CREATE);
-
         }
-
     }
     // =============================================================================================
 
     // SetupDialog Interface Methods
     @Override
     public void onPositiveButton(long dialogMode) {
-
         this.dialogMode = dialogMode;
         progressDialog.show();
-
         if(dialogMode == SetupDialog.DIALOG_MODE_CREATE) {
-
             // Create account with Email and Password
             mAuth.createUserWithEmailAndPassword(user.email,
                     user.password).addOnCompleteListener(this);
-
         }
 
         if (dialogMode == SetupDialog.DIALOG_MODE_LOGIN){
-
             // Logging in with Email And Password
             mAuth.signInWithEmailAndPassword(user.email,
                     user.password).addOnCompleteListener(this);
-
         }
-
     }
 
     @Override
     public void onCancelButton() {
-
         // Saved for extra features
-
     }
 
     @Override
@@ -532,20 +547,16 @@ public class Chooser extends AppCompatActivity implements GoogleApiClient.OnConn
                                      String password) {
 
         user = new User(username, email, password);
-
     }
 
     @Override
     public void showAlertWithLocalErrorFormat(String title, String message) {
-
         alertUserWithTitleAndMessage(title, message);
-
     }
 
     //Complete Listener for signing in or creating account
     @Override
     public void onComplete(@NonNull Task<AuthResult> task) {
-
         if(dialogMode == SetupDialog.DIALOG_MODE_CREATE) {
             createAccountAction(task);
         }
@@ -555,38 +566,34 @@ public class Chooser extends AppCompatActivity implements GoogleApiClient.OnConn
         }
 
         progressDialog.dismiss();
-
     }
 
-    private void alertUserWithTitleAndMessage(String title, String message) {
-
+    private AlertDialog alertUserWithTitleAndMessage(String title, String message) {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder( this );
         alertBuilder.setTitle(title);
         alertBuilder.setIcon(R.drawable.ic_error_outline);
         alertBuilder.setMessage(message);
-        alertBuilder.setPositiveButton("Ok", null).create().show();
+        alertBuilder.setPositiveButton("Ok", null);
 
+        AlertDialog alertDialog = alertBuilder.create();
+        alertDialog.show();
+
+        return alertDialog;
     }
 
     private void showAccountDialog(long mode) {
-
         setUpDialogFragment = SetupDialog.newInstanceOf(mode);
         setUpDialogFragment.show(getSupportFragmentManager(), SetupDialog.TAG);
-
     }
 
     private void createAccountAction(Task<AuthResult> task){
-
         if (!task.isSuccessful()) {
-
             //noinspection ConstantConditions,ThrowableResultOfMethodCallIgnored
             alertUserWithTitleAndMessage("Creating account Error",
                     task.getException().getLocalizedMessage() );
-
         }else {
-
             UserProfileChangeRequest userProfileChangeRequest = new UserProfileChangeRequest.Builder()
-                    .setDisplayName(user.username)
+                    .setDisplayName(user.displayName)
                     .build();
 
             mFuser = mAuth.getCurrentUser();
@@ -599,9 +606,7 @@ public class Chooser extends AppCompatActivity implements GoogleApiClient.OnConn
                     if (!task.isSuccessful()){
 
                         Log.e(TAG, "onComplete: updateProfile: Profile Not updated...");
-
                     }else{
-
                         user.userId = mFuser.getUid();
 
                         Log.e(TAG, "\n" + "createAccountAction: FIREBASE DISPLAY NAME :---> " + mFuser.getDisplayName() + "\n");
@@ -617,50 +622,37 @@ public class Chooser extends AppCompatActivity implements GoogleApiClient.OnConn
                         setResult(RESULT_OK, intent);
 
                         finish();
-
                     }
-
                 }
 
             });
-
         }
-
     }
 
     private void loginAccountAction(Task<AuthResult> task){
-
         if (!task.isSuccessful()) {
-
             //noinspection ConstantConditions,ThrowableResultOfMethodCallIgnored
             alertUserWithTitleAndMessage("Login Error",
                     task.getException().getLocalizedMessage() );
 
             Log.e(TAG, "signInWithEmailAndPassword: EXCEPTION --> ",
                     task.getException());
-
         }else {
-
             setUpDialogFragment.dismiss();
 
             mFuser = mAuth.getCurrentUser();
 
             //noinspection ConstantConditions
             user.userId = mFuser.getUid();
-            user.username = mFuser.getDisplayName();
+            user.email = mFuser.getEmail();
+            user.provider = mFuser.getProviderData().toString();
+            user.displayName = mFuser.getDisplayName();
 
             Log.e(TAG, "signInWithEmailAndPassword:onComplete: \n" + "With ID :---> "
                     + user.userId + "\n" +"And Email :---> "
                     + user.email);
 
-            Intent intent = new Intent();
-            intent.putExtra("CURRENT_USER_PROFILE", user);
-            setResult(RESULT_OK, intent);
-
             finish();
-
         }
-
     }
-
 }
