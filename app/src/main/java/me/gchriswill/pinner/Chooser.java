@@ -285,7 +285,7 @@ public class Chooser extends AppCompatActivity implements GoogleApiClient.OnConn
                             user.userId = mFuser.getUid();
                             user.displayName = displayName;
                             user.email = mFuser.getEmail();
-                            user.provider = mFuser.getProviderId();
+                            //user.provider = mFuser.getProviderId();
 
                             mFDB.getReference().child("users").child(mFuser.getUid())
                                     .addValueEventListener(new ValueEventListener() {
@@ -306,9 +306,9 @@ public class Chooser extends AppCompatActivity implements GoogleApiClient.OnConn
                                             Log.e(TAG, "onCancelled: " + databaseError.getMessage());
                                         }
                                     });
+
                             progressDialog.setMessage(displayName + " had successfully logged in using your " +
                                     "Twitter account!");
-
                             progressDialog.getButton(ProgressDialog.BUTTON_POSITIVE)
                                     .setVisibility(View.VISIBLE);
                         }
@@ -363,7 +363,7 @@ public class Chooser extends AppCompatActivity implements GoogleApiClient.OnConn
                             user.userId = mFuser.getUid();
                             user.displayName = displayName;
                             user.email = mFuser.getEmail();
-                            user.provider = mFuser.getProviderId();
+                            //user.provider = mFuser.getProviderId();
 
                             // Checking if the user not exists in databased then ad user object to
                             // database...
@@ -389,7 +389,6 @@ public class Chooser extends AppCompatActivity implements GoogleApiClient.OnConn
 
                             progressDialog.setMessage(displayName +
                                     " has successfully logged in using a " + "Google account!");
-
                             progressDialog.getButton(ProgressDialog.BUTTON_POSITIVE)
                                     .setVisibility(View.VISIBLE);
                         }
@@ -438,6 +437,10 @@ public class Chooser extends AppCompatActivity implements GoogleApiClient.OnConn
                             mFuser = task.getResult().getUser();
                             String displayName = mFuser.getDisplayName();
 
+                            user = new User();
+                            user.userId = mFuser.getUid();
+                            user.displayName = displayName;
+                            user.email = mFuser.getEmail();
                             user.provider = mFuser.getProviderId();
 
                             mFDB.getReference().child("users").child(mFuser.getUid())
@@ -460,11 +463,8 @@ public class Chooser extends AppCompatActivity implements GoogleApiClient.OnConn
                                         }
                                     });
 
-                            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-
                             progressDialog.setMessage(displayName + " had successfully logged in using your " +
                                     "Facebook account!");
-
                             progressDialog.getButton(ProgressDialog.BUTTON_POSITIVE)
                                     .setVisibility(View.VISIBLE);
                         }
@@ -645,7 +645,7 @@ public class Chooser extends AppCompatActivity implements GoogleApiClient.OnConn
             //noinspection ConstantConditions
             user.userId = mFuser.getUid();
             user.email = mFuser.getEmail();
-            user.provider = mFuser.getProviderData().toString();
+            //user.provider = mFuser.getProviderData().toString();
             user.displayName = mFuser.getDisplayName();
 
             Log.e(TAG, "signInWithEmailAndPassword:onComplete: \n" + "With ID :---> "

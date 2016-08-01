@@ -408,7 +408,7 @@ public class AccountEditorActivity extends AppCompatActivity implements
             Log.e(TAG, "onDataChange: ON USER ---> " + resultingUser.displayName);
         }
 
-        accountEditorActivityFragment.setFormValues();
+        if (resultingUser != null) accountEditorActivityFragment.setFormValues();
     }
 
     @Override
